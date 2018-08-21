@@ -348,7 +348,7 @@ class Window(QWidget):
 
     def __compare(self,lastWordList,currentWordList):
         comparedWordList = {"deleted": [], "new": []}
-        comparedWordDescList=[];
+		comparedWordDescList=[];
         if lastWordList:
             self.seek("Last record exist & Do comparasion")
             i=0;
@@ -358,8 +358,8 @@ class Window(QWidget):
             for term in currentWordList:
                 if term not in lastWordList:
                     comparedWordList['new'].append(term)
-                    comparedWordDescList.append(self.currentWordDescList[i])
-                i=i+1
+                    comparedWordDescList.append(self.descresults[i])
+                i++
         else:
             self.seek("No record & First sync")
             comparedWordList["new"] = currentWordList
@@ -372,7 +372,7 @@ class Window(QWidget):
     def __lookup(self,newWords):
         if self.LookupThread:
             self.LookupThread.terminate()
-        self.LookupThread = Lookupper(newWords,self.comparedWordDescList)
+        self.LookupThread = Lookupper(newWords)
         self.connect(self.LookupThread,QtCore.SIGNAL('seek_lookup(QString)'),self.seek)
         self.connect(self.LookupThread,QtCore.SIGNAL('updateProgressBar_lookup(int,int)'),self.updateProgressBar)
         self.LookupThread.start()
