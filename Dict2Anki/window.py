@@ -348,6 +348,8 @@ class Window(QWidget):
 
     def __compare(self,lastWordList,currentWordList):
         comparedWordList = {"deleted": [], "new": []}
+        self.seek("lastWordList length:" + str(len(lastWordList)))
+        self.seek("currentWordList length:" + str(len(currentWordList)))
         comparedWordDescList=[];
         if lastWordList:
             self.seek("Last record exist & Do comparasion")
