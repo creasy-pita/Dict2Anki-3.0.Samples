@@ -56,3 +56,7 @@
 <span><img src = "https://raw.githubusercontent.com/megachweng/Dict2Anki/master/screenshots/firstsync.gif" ></span>
 <span><img src = "https://raw.githubusercontent.com/megachweng/Dict2Anki/master/screenshots/secondsync.gif" ></span>
 
+2018-10-17
+addon 文件夹为 源码 未做修改
+python2 文件夹 为对源码修改后的Python2的版本
+python2 文件夹 为对源码修改后的Python3的版本
