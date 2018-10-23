@@ -296,7 +296,6 @@ class Window(QWidget):
             self.syncButton.setEnabled(False)
             self.lastWordList = self.__getLastWordList()
             self.currentWordList = self.__getCurrentWordList()
-			
             self.comparedWordList = self.__compare(self.lastWordList,self.currentWordList)
             self.lookUpedTerms = self.__lookup(self.comparedWordList['new'])
             self.__getAssets(self.lookUpedTerms)
@@ -305,9 +304,7 @@ class Window(QWidget):
             self.__saveSyncSettings()
             self.syncButton.setText('Sync')
             self.syncButton.setEnabled(True)
-			
-            for term in self.comparedWordDescList:
-                self.seek("customize desc:" + term)
+
     def __getCurrentWordList(self):
         if self.dictThread:
             self.dictThread.terminate()
@@ -326,7 +323,6 @@ class Window(QWidget):
             mw.app.processEvents()
             self.dictThread.wait(1)
         results = self.dictThread.results
-        self.currentWordDescList = self.dictThread.descresults
         self.dictThread = None
         return results
 
@@ -348,33 +344,26 @@ class Window(QWidget):
 
     def __compare(self,lastWordList,currentWordList):
         comparedWordList = {"deleted": [], "new": []}
-        self.seek("lastWordList length:" + str(len(lastWordList)))
-        self.seek("currentWordList length:" + str(len(currentWordList)))
-        comparedWordDescList=[];
         if lastWordList:
             self.seek("Last record exist & Do comparasion")
-            i=0;
             for term in lastWordList:
                 if term not in currentWordList:
                     comparedWordList['deleted'].append(term)
             for term in currentWordList:
                 if term not in lastWordList:
                     comparedWordList['new'].append(term)
-                    comparedWordDescList.append(self.currentWordDescList[i])
-                i=i+1
         else:
             self.seek("No record & First sync")
             comparedWordList["new"] = currentWordList
             comparedWordList['deleted'] = []
 
         self.seek("compare results:" + json.dumps(comparedWordList))
-        self.comparedWordDescList = comparedWordDescList
         return comparedWordList
 
     def __lookup(self,newWords):
         if self.LookupThread:
             self.LookupThread.terminate()
-        self.LookupThread = Lookupper(newWords,self.comparedWordDescList)
+        self.LookupThread = Lookupper(newWords)
         self.connect(self.LookupThread,QtCore.SIGNAL('seek_lookup(QString)'),self.seek)
         self.connect(self.LookupThread,QtCore.SIGNAL('updateProgressBar_lookup(int,int)'),self.updateProgressBar)
         self.LookupThread.start()

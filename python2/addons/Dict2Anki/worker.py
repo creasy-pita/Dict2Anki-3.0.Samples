@@ -72,9 +72,7 @@ class Youdao(QtCore.QThread):
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:58.0) Gecko/20100101 Firefox/58.0')]
         urllib2.install_opener(opener)
-        f=open("guru99.txt", "a+")
-        f.write("Appended line \r\n")
-        f.close()
+
         authentication_url = 'https://logindict.youdao.com/login/acc/login'
         payload = {
             'app':'web',
@@ -143,7 +141,7 @@ class Youdao(QtCore.QThread):
             self.emit(QtCore.SIGNAL('updateProgressBar_dict(int,int)'),int(current+1), int(tp))
 
         self.results = parser.terms
-        self.descresults = parser.descterms
+
 
 # Youdao Only
 class parseYoudaoWordbook(HTMLParser):
@@ -151,17 +149,13 @@ class parseYoudaoWordbook(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.terms = []
-        self.descterms = []
 
     def handle_starttag(self, tag, attrs):
         # retrive the terms
-        
         if tag == 'div':
             for attribute, value in attrs:
                 if attribute == 'class' and value == 'word':
                     self.terms.append(attrs[1][1])
-                if attribute == 'class' and value == 'desc':
-                    self.descterms.append(attrs[1][1])				
 
 
 class imageDownloader(QtCore.QThread):
@@ -194,10 +188,9 @@ class pronunciationDownloader(QtCore.QThread):
             self.emit(QtCore.SIGNAL('seek_pron(QString)'),str('Getting pronunciation: ' + self.terms[current]))
 
 class Lookupper(QtCore.QThread):
-    def __init__(self, wordList,wordDescList):
+    def __init__(self, wordList):
         QtCore.QThread.__init__(self)
         self.wordList = wordList
-        self.wordDescList = wordDescList
         self.lookUpedTerms = []
     def run(self):
         if self.wordList:
@@ -212,7 +205,7 @@ class Lookupper(QtCore.QThread):
                     pass
 
                 try:
-                    explains = self.wordDescList[current]
+                    explains = json_result["ec"]["word"][0]["trs"][0]["tr"][0]["l"]["i"][0]
                 except:
                     try:
                         explains = json_result["web_trans"]["web-translation"][0]["trans"][0]["value"]
