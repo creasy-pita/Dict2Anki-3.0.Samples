@@ -73,8 +73,7 @@ class Youdao(QtCore.QThread):
         cj = http.cookiejar.LWPCookieJar()
         opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
         opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:58.0) Gecko/20100101 Firefox/58.0')]
-        urllib.request.install_opener(opener)
-
+        urllib.request.install_opener(opener)
         authentication_url = 'https://logindict.youdao.com/login/acc/login'
         payload = {
             'app':'web',

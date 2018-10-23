@@ -58,5 +58,7 @@
 
 2018-10-17
 addon 文件夹为 源码 未做修改
+Dict2Anki 文件夹 加入了释义的导入
 python2 文件夹 为对源码修改后的Python2的版本
-python2 文件夹 为对源码修改后的Python3的版本
+python3 文件夹 为对源码修改后的Python3的版本
+Dict2AnkiEditV2 加入 输出日志到本地文件件 方便查找问题
