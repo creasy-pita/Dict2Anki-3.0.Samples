@@ -35,7 +35,7 @@ class Youdao(object):
     def getWordPerPage(self, pageNumber):
         words = []
         try:
-            self.SIG.log.emit(f'获取单词本第:{pageNumber + 1}页')
+            #self.SIG.log.emit(f'获取单词本第:{pageNumber + 1}页')
             rsp = requests.get(
                 'http://dict.youdao.com/wordbook/wordlist',
                 params={'p': pageNumber},
@@ -47,16 +47,16 @@ class Youdao(object):
             for row in rows:
                 cols = row.find_all('td')
                 words.append(cols[1].div.a.text.strip())
-        except Exception as e:
-            self.SIG.progress.emit()
-            self.SIG.exceptionOccurred.emit(e)
-            self.SIG.log.emit('网络异常')
+        #except Exception as e:
+        #    self.SIG.progress.emit()
+        #    self.SIG.exceptionOccurred.emit(e)
+        #    self.SIG.log.emit('网络异常')
         finally:
             return words
     def getWordDescPerPage(self, pageNumber):
         wordsDescDic = {}
         try:
-            self.SIG.log.emit(f'获取单词本注释第:{pageNumber + 1}页')
+            #self.SIG.log.emit(f'获取单词本注释第:{pageNumber + 1}页')
             rsp = requests.get(
                 'http://dict.youdao.com/wordbook/wordlist',
                 params={'p': pageNumber},
@@ -68,28 +68,32 @@ class Youdao(object):
             for row in rows:
                 cols = row.find_all('td')
                 wordsDescDic[cols[1].div.a.text.strip()]=cols[3].div.text.strip()
-            self.SIG.progress.emit()
-        except Exception as e:
-            self.SIG.progress.emit()
-            self.SIG.exceptionOccurred.emit(e)
-            self.SIG.log.emit('网络异常')
+        #    self.SIG.progress.emit()
+        #except Exception as e:
+        #    self.SIG.progress.emit()
+        #    self.SIG.exceptionOccurred.emit(e)
+        #    self.SIG.log.emit('网络异常')
         finally:
-            return wordsDesc
+            return wordsDescDic
     def __printinfo(self):
         print(self.username)
         print(self.password)
     def run(self):
-        words = chain(*[self.getWordPerPage(n) for n in range(self.getTotalPage())])
-        words1 = set(list(words))
-        for  word in words1:
-            print(word)
-
+        dic={}
+        for n in range(self.getTotalPage()):
+            wordsdic = self.getWordDescPerPage(n)
+            dic = {**wordsdic,**dic}
+        print(dic)
+        #words = chain(*[self.getWordDescPerPage(n) for n in range(self.getTotalPage())])
+        #words = list(words)
+        #for  word in words:
+        #    print(word)
 cookie=dict(DICT_LOGIN='3||1543279876989',DICT_PERS='v2|urstoken||DICT||web||-1||1547954930121||122.224.233.66||junqiangsix@163.com||TuO46zh4k50eFnHgu0MkERQuRfPuRHkWRkfOMPuOfwuRTKOLkf6MQFRgBnMTB6LQyROWh4OlOMeu0PyOLqZhHU5R',DICT_SESS='v2|URSM|DICT||junqiangsix@163.com||urstoken||XagdhwfFFj4coPWQa7lRMuoiQsE.HVY8unmkGyHQ3up3KLq47KPqRQcc6VlGSQJp2XuI7d_z_Kc154w.w80KQeBg7fsmPB36eYLQe8.D5dH4OekwYDLqwVf0buO2cM5b9aDZ8VPJATT1NmLcn7sBR2IdxtsEliK15mgO8UOdxV4as_NpL9LVksM7ilPHfdc.p||604800000||pu6MlEhMpB0TyOMwKhHQFRzEPM6u6LTyRe4kfkl0LYfRzfnMq4nHeuRJShHgu0MpuRJKOMJynHPBRqykMQFOMgLR')
 aa=Youdao('aa','bb',cookie)
 #aa._Youdao__simplerequest()
 print(aa._Youdao__checkCookie())
-for  word in aa.getWordPerPage(1):
-    print(word)
-#aa.run()
+#for  word in aa.getWordPerPage(1):
+#    print(word)
+aa.run()
 #aa._Youdao__printinfo()
 
