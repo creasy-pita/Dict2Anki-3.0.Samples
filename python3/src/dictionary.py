@@ -127,10 +127,15 @@ class Youdao(QObject):
     @pyqtSlot()
     def run(self):
         if self.login():
-            words = chain(*[self.getWordPerPage(n) for n in range(self.getTotalPage())])
-            self.SIG.wordsReady.emit(list(words))
-
-
+            wordsdescDic = self.getAllWordPage()
+            self.SIG.log.emit(f"查询:self.getAllWordPage()")
+            self.SIG.wordsReady.emit(list(wordsdescDic.keys()),wordsdescDic)
+    def getAllWordPage(self):
+        dic={}
+        for n in range(self.getTotalPage()):
+            wordsdescDic = self.getWordDescPerPage(n)
+            dic = {**dic,**wordsdescDic}
+        return dic
 class Eudict(QObject):
     timeout = 10
     headers = {

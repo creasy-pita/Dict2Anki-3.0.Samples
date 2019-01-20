@@ -74,11 +74,11 @@ class YoudaoAPI(QObject):
     url = 'https://dict.youdao.com/jsonapi'
     params = {"dicts": {"count": 99, "dicts": [["ec", "pic_dict"], ["web_trans"], ["fanyi"], ["blng_sents_part"]]}}
 
-    def __init__(self, wordList,wordDescList, parser):
+    def __init__(self, wordList,wordDescDic, parser):
         super().__init__()
         self.SIG = APISIG()
         self.wordList = wordList
-        self.wordDescList = wordDescList
+        self.wordDescDic = wordDescDic
         self.parser = parser
 
     def query(self, word):
@@ -88,6 +88,8 @@ class YoudaoAPI(QObject):
                 params=urlencode(dict(self.params, **{'q': word})),
             )
             jsonResult = self.parser(rsp.json(), word).json
+            #释义改写为自定义例句
+            jsonResult["definitions"] = self.wordDescDic[word]
             self.SIG.log.emit(f"查询:{word}")
             return jsonResult
         except Exception as e:

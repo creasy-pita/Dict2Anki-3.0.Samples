@@ -168,7 +168,7 @@ class Window(QWidget):
             t.wait(1)
             t.quit()
             mw.app.processEvents()
-
+        elf.SIG.log.emit(f"查询:self.compare(remoteWords)")
         needToQueryWords = self.compare(remoteWords)
 
         queryThread = QThread()
@@ -215,7 +215,7 @@ class Window(QWidget):
         return needToAddWords
 
     @pyqtSlot(object)
-    def addNote(self, words,wordsdesc):
+    def addNote(self, words):
         if words:
             self.log(f'查询结果:{words}')
         _, t = self.threadList[1]
