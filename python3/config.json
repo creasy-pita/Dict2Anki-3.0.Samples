@@ -1,0 +1,22 @@
+{
+    "dictionaries": [
+        {
+            "username": null,
+            "password": null,
+            "cookie": null
+        },
+        {
+            "username": null,
+            "password": null,
+            "cookie": null
+        }
+    ],
+    "active": 1,
+    "deck": null,
+    "image": false,
+    "sample": false,
+    "BrEPron": false,
+    "AmEPron": false,
+    "BrEPhonetic": false,
+    "AmEPhonetic": false
+}

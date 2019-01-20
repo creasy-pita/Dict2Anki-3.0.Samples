@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\screenshot",
-    "\\src"
+    "\\screenshot"
   ],
-  "SelectedNode": "\\src\\dictionary.py",
+  "SelectedNode": "\\config.json",
   "PreviewInSolutionExplorer": false
 }
