@@ -74,10 +74,11 @@ class YoudaoAPI(QObject):
     url = 'https://dict.youdao.com/jsonapi'
     params = {"dicts": {"count": 99, "dicts": [["ec", "pic_dict"], ["web_trans"], ["fanyi"], ["blng_sents_part"]]}}
 
-    def __init__(self, wordList, parser):
+    def __init__(self, wordList,wordDescList, parser):
         super().__init__()
         self.SIG = APISIG()
         self.wordList = wordList
+        self.wordDescList = wordDescList
         self.parser = parser
 
     def query(self, word):
@@ -102,7 +103,7 @@ class YoudaoAPI(QObject):
         for word in self.wordList:
             TP.add_task(self.query, word)
         queryResults = TP.wait_complete()
-        self.SIG.wordsReady.emit(queryResults)
+        self.SIG.wordsReady.emit(queryResults,self.wordsdesc)
 
 
 class AudioDownloader(QObject):

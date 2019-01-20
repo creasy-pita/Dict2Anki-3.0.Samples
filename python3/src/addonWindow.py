@@ -160,8 +160,8 @@ class Window(QWidget):
         dictWorker.moveToThread(dictWorkerThread)
         dictWorkerThread.start()
 
-    @pyqtSlot(object)
-    def query(self, remoteWords):
+    @pyqtSlot(object,object)
+    def query(self, remoteWords,remoteWordsDescDic):
         self.log(f"远程单词本:{remoteWords}")
         _, t = self.threadList[0]
         while not t.isFinished():
@@ -172,7 +172,7 @@ class Window(QWidget):
         needToQueryWords = self.compare(remoteWords)
 
         queryThread = QThread()
-        queryWorker = api.YoudaoAPI(needToQueryWords, api.YoudaoParser)
+        queryWorker = api.YoudaoAPI(needToQueryWords,remoteWordsDescDic, api.YoudaoParser)
         self.threadList.append((queryWorker, queryThread))
         queryWorker.SIG.progress.connect(self.updateProgress)
         queryWorker.SIG.totalTasks.connect(self.ui.progressBar.setMaximum)
@@ -215,7 +215,7 @@ class Window(QWidget):
         return needToAddWords
 
     @pyqtSlot(object)
-    def addNote(self, words):
+    def addNote(self, words,wordsdesc):
         if words:
             self.log(f'查询结果:{words}')
         _, t = self.threadList[1]

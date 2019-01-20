@@ -102,7 +102,28 @@ class Youdao(QObject):
             self.SIG.log.emit('网络异常')
         finally:
             return words
-
+    def getWordDescPerPage(self, pageNumber):
+        wordsDescDic = {}
+        try:
+            self.SIG.log.emit(f'获取单词本注释第:{pageNumber + 1}页')
+            rsp = requests.get(
+                'http://dict.youdao.com/wordbook/wordlist',
+                params={'p': pageNumber},
+                cookies=self.cookie
+            )
+            soup = BeautifulSoup(rsp.text, features='html.parser')
+            table = soup.find(id='wordlist').table.tbody
+            rows = table.find_all('tr')
+            for row in rows:
+                cols = row.find_all('td')
+                wordsDescDic[cols[1].div.a.text.strip()]=cols[3].div.text.strip()
+            self.SIG.progress.emit()
+        except Exception as e:
+            self.SIG.progress.emit()
+            self.SIG.exceptionOccurred.emit(e)
+            self.SIG.log.emit('网络异常')
+        finally:
+            return wordsDesc
     @pyqtSlot()
     def run(self):
         if self.login():
