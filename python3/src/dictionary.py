@@ -123,13 +123,12 @@ class Youdao(QObject):
             self.SIG.exceptionOccurred.emit(e)
             self.SIG.log.emit('网络异常')
         finally:
-            return wordsDesc
+            return wordsDescDic
     @pyqtSlot()
     def run(self):
         if self.login():
             wordsdescDic = self.getAllWordPage()
-            self.SIG.log.emit(f"查询:self.getAllWordPage()")
-            self.SIG.wordsReady.emit(list(wordsdescDic.keys()),wordsdescDic)
+            self.SIG.wordsReady.emit(wordsdescDic)
     def getAllWordPage(self):
         dic={}
         for n in range(self.getTotalPage()):

@@ -105,7 +105,7 @@ class YoudaoAPI(QObject):
         for word in self.wordList:
             TP.add_task(self.query, word)
         queryResults = TP.wait_complete()
-        self.SIG.wordsReady.emit(queryResults,self.wordsdesc)
+        self.SIG.wordsReady.emit(queryResults)
 
 
 class AudioDownloader(QObject):

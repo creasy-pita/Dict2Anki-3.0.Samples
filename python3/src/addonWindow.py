@@ -160,15 +160,15 @@ class Window(QWidget):
         dictWorker.moveToThread(dictWorkerThread)
         dictWorkerThread.start()
 
-    @pyqtSlot(object,object)
-    def query(self, remoteWords,remoteWordsDescDic):
+    @pyqtSlot(object)
+    def query(self, remoteWordsDescDic):
+        remoteWords = list(remoteWordsDescDic.keys())
         self.log(f"远程单词本:{remoteWords}")
         _, t = self.threadList[0]
         while not t.isFinished():
             t.wait(1)
             t.quit()
             mw.app.processEvents()
-        elf.SIG.log.emit(f"查询:self.compare(remoteWords)")
         needToQueryWords = self.compare(remoteWords)
 
         queryThread = QThread()
